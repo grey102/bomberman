@@ -93,5 +93,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53e5f856e12d79f41b191496e79c1c99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionPrefab: {fileID: 338796717625101044, guid: 1d7e5f1b47be1864cb0229d452408493,
+  explosionPrefab: {fileID: 1161111000037591063, guid: 1d7e5f1b47be1864cb0229d452408493,
     type: 3}
+  Stones:
+    serializedVersion: 2
+    m_Bits: 256
