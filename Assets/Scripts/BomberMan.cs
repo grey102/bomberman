@@ -1,18 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BomberMan : MonoBehaviour
 {
-    private float movementSpeed = 5f;
 
-    //Prefabs
+    public bool dead = false;
+
     public GameObject bombPrefab;
 
     void Update()
     {
         Move();
-        //AxisMove();
     }
 
     void Move()
@@ -39,25 +36,18 @@ public class BomberMan : MonoBehaviour
         }
     }
 
-    void AxisMove()
-    {
-        //get the Input from Horizontal axis
-        float horizontalInput = Input.GetAxis("Horizontal");
-        //get the Input from Vertical axis
-        float verticalInput = Input.GetAxis("Vertical");
-
-        //update the position
-        transform.position = transform.position + new Vector3(horizontalInput * movementSpeed * Time.deltaTime, verticalInput * movementSpeed * Time.deltaTime, 0);
-
-        //output to log the position change
-        Debug.Log(transform.position);
-    }
-
     void DropBomb()
     {
+        Instantiate(bombPrefab, new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), transform.position.z), transform.rotation);
+    }
 
-        Instantiate(bombPrefab, new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y)), transform.rotation);
-
+    public void OnTriggerEnter(Collider other)
+    {
+        if (!dead && other.CompareTag("Explosion"))
+        { 
+            dead = true;
+            Destroy(gameObject);
+        }
     }
 }
 

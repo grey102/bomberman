@@ -1,60 +1,62 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DestroyBomb : MonoBehaviour
 {
-    public GameObject explosionPrefab;
-	public LayerMask Blocks;
+	public GameObject explosion1Prefab;
+	public LayerMask levelMask;
+	private bool exploded = false;
 
-
-    void Start()
-    {
-        Invoke("Explode", 3f);
-    }
+	void Start()
+	{
+		Invoke("Explode", 3f);
+	}
 
 	 public void Explode()
 	 {
-		 Instantiate(explosionPrefab, transform.position, Quaternion.identity); //1
+		 Instantiate(explosion1Prefab, transform.position, Quaternion.identity); 
 
 		StartCoroutine(CreateExplosions(Vector3.up));
 		StartCoroutine(CreateExplosions(Vector3.right));
 		StartCoroutine(CreateExplosions(Vector3.down));
 		StartCoroutine(CreateExplosions(Vector3.left));
 		
-		GetComponent<SpriteRenderer>().enabled = false; //2
-		 transform.Find("Collider").gameObject.SetActive(false); //3
-		 Destroy(gameObject, .3f); //4
+		GetComponent<SpriteRenderer>().enabled = false; 
+		exploded = true;
+		transform.Find("BoxCollider").gameObject.SetActive(false);
+		Destroy(gameObject, .3f); 
+		
 	 }
 
 	private IEnumerator CreateExplosions(Vector3 direction)
 	{
-        //1
-        for (int i = 1; i < 3; i++)
-        {
-            //2
-            RaycastHit hit;
-            //3
-            Physics.Raycast(transform.position + new Vector3(0, .5f, 0), direction, out hit,
-              i, Blocks);
+		for (int i = 1; i < 3; i++)
+		{
+			RaycastHit hit;
+			Physics.Raycast(transform.position + new Vector3(0, 0, .5f), direction, out hit, i, levelMask);
 
-            //4
-            if (!hit.collider)
-            {
-                Instantiate(explosionPrefab, transform.position + (i * direction),
-                  //5 
-                  explosionPrefab.transform.rotation);
-                //6
-            }
-            else
-            { //7
-                break;
-            }
+			if (!hit.collider)
+			{
+				Instantiate(explosion1Prefab, transform.position + (i * direction), explosion1Prefab.transform.rotation);
+			}
+			else
+			{
+				break;
+			}
 
-            //8
-            yield return new WaitForSeconds(.05f);
-        }
+			yield return new WaitForSeconds(.05f);
+		}
 
-    }
+	}
+
+	public void OnTriggerEnter(Collider other)
+	{
+		if (!exploded && other.CompareTag("Explosion"))
+		{ 
+			CancelInvoke("Explode");
+			Explode();
+		}
+
+	}
 
 }
