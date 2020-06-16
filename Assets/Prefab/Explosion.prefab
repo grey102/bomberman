@@ -128,3 +128,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Delay: 0.5
+  BrickDeathEffect: {fileID: 8656870159655990566, guid: 4fe7047c9c627bc4eb56796cf6861eff,
+    type: 3}

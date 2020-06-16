@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
-
 public class BomberMan : MonoBehaviour
 {
-
-    public bool dead = false;
-
+    public bool deadBomberman;
     public GameObject bombPrefab;
 
     void Update()
@@ -43,11 +40,12 @@ public class BomberMan : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (!dead && other.CompareTag("Explosion"))
-        { 
-            dead = true;
+        if (!deadBomberman && other.CompareTag("Explosion"))
+        {
+            deadBomberman = true;
             Destroy(gameObject);
         }
     }
+
 }
 
